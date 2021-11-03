@@ -64,8 +64,10 @@ class updatePrescriptionCTRL
                 </tr> 
                   
                 <tr>
-                    <td style="height: 100px;" colspan="2">
-                        <input type="submit" name="Update" value="Update">
+                    <td><a href="viewPrescriptionPage.php"  style="background-color: #016064;font-size: 10px;width:100%">BACK</a></td>
+                    <td>
+                         
+                        <input style="background-color: #016064;font-size: 10px;width:100%; color: white; " type="submit" name="Update" value="Update">
 
                     </td>
                 </tr>                                   
