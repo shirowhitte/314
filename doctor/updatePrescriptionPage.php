@@ -95,9 +95,15 @@ if(isset($_POST['logout']))
           </a>
         </li>
         <li>
-          <a href="addPrescriptionPage.php"  >
+          <a href="addPrescriptionPage.php">
             <i class='bx bx-first-aid' ></i>
             <span class="links_name">Add Prescription</span>
+          </a>
+        </li>
+        <li>
+          <a href="searchPatientPrescriptionPage.php">
+            <i class='bx bx-search-alt'></i>
+            <span class="links_name">Search Prescription</span>
           </a>
         </li>
         <li>

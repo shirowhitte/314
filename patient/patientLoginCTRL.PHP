@@ -71,16 +71,19 @@ class patientLoginCTRL
         $conn = mysqli_connect("localhost","root","","csit314"); 
         $sql="SELECT name, role , password FROM user WHERE id = '$id' and password='$password'";
         $result = mysqli_query($conn,$sql);
-        $user_data = mysqli_fetch_array($result)  or die( mysqli_error($conn));
+        $user_data = mysqli_fetch_array($result) or die( mysqli_error($conn));
         $res = mysqli_num_rows($result) or die( mysqli_error($conn));
-        if($res==1)
+        if($res==0)
         {
-            echo $user_data['role'] ." " .$user_data['name'] ;
-            $_SESSION['password'] = $user_data['password'];
-            return true;
+            return false;
 
         }
-        return false;
+        else
+        {
+            echo $user_data['role'] ." " .$user_data['name'];
+            $_SESSION['password'] = $user_data['password'];
+            
+        }
     }
   
     public function displayErrMsg()

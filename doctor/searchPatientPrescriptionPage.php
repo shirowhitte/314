@@ -3,6 +3,7 @@ include_once 'doctorLoginCTRL.php';//connection
 include_once 'doctorLogoutCTRL.php';//connection
 include_once 'addPrescriptionCTRL.php';
 include_once 'viewPrescriptionCTRL.php';
+include_once 'searchPatientPrescriptionCTRL.php';
 include_once '../assets/conn/dbconnect.php';//connection
 
 session_start();
@@ -11,6 +12,7 @@ $conn = mysqli_connect("localhost","root","","csit314");
 $doctor = new doctorLoginCTRL();  
 $view = new viewPrescriptionControl();
 $addPres = new addPrescriptionCTRL();  
+$searchp =  new searchPrescriptionControl();
 
 $doctorId = $_SESSION['id'];//get id
 $doctorPw = $_SESSION['password'];//get id
@@ -91,13 +93,13 @@ if(isset($_POST['logout']))
           </a>
         </li>
         <li>
-          <a href="searchPatientPrescriptionPage.php">
+          <a href="searchPatientPrescriptionPage.php" class="active">
             <i class='bx bx-search-alt'></i>
             <span class="links_name">Search Prescription</span>
           </a>
         </li>
         <li>
-          <a href="viewPrescriptionPage.php"  class="active">
+          <a href="viewPrescriptionPage.php">
             <i class='bx bx-history'></i>
             <span class="links_name">View Prescription</span>
           </a>
@@ -119,19 +121,57 @@ if(isset($_POST['logout']))
       <div class="sales-boxes">
         <div class="recent-sales box" style="width:100%">
           <div class="title">
-            <h2 style="text-align: center;"> View Prescription</h2>
-           <?php
-            if(isset($_POST['view']))
-            {
-              $prescription_id = $_POST['id'];
-              $pid = $view->getPrescription($prescription_id);
-              $view->displayViewPrescriptionDetailPage(); 
-            }
-            else
-            {
-                $view->getPrescriptions($doctorId);
-                $view->displayViewPrescriptionPage(); 
-            }
+            <h2 style="text-align: center;"> Search Prescription</h2>
+            <form method="post" action="searchPatientPrescriptionPage.php" style="text-align: center;"><br>
+              <select style="width: 50%;" name="pid" id="pid">
+                       <?PHP 
+                      $conn = mysqli_connect("localhost","root","","csit314");
+                       $select1= "SELECT DISTINCT(prescriptionid) FROM prescription WHERE doctorid='$doctorId'";
+                       echo "<option>Select Prescription</option>"; 
+                      foreach ($conn->query($select1) as $rw)
+                      {
+                          echo "<option value=$rw[prescriptionid]>$rw[prescriptionid]</option>"; 
+                      }
+
+                      ?>
+                    </select> <br><br>
+                    
+                    <select style="width: 50%;" name="patient" id="patient">
+                       <?PHP 
+                      $conn = mysqli_connect("localhost","root","","csit314");
+                       $select= "SELECT id FROM user WHERE role='Patient'";
+                      echo "<option>Select Patient</option>"; 
+                      foreach ($conn->query($select) as $rw)
+                      {
+                          echo "<option value=$rw[id]>$rw[id]</option>"; 
+                      }
+
+                      ?>
+                    </select> <br><br>
+                    
+
+                    <input style="background-color: #59788e;font-size: 10px;width:30%"type="submit" name="searchP" value="Search">
+
+            </form>
+            <br>
+
+            <?php
+              if (isset($_POST['searchP'])) 
+              {
+                $prescriptionid = $_REQUEST['pid'];
+                $patientid = $_REQUEST['patient'];
+                
+                if($searchp->onSubmit($doctorId, $patientid))
+                {
+                  $searchp->getPrescriptions($doctorId, $patientid);
+                }
+                $searchp->displayViewPrescriptionPage();
+                $searchp->getPrescription($prescriptionid);
+              }
+              if(isset($_POST['view']))
+              {
+                $searchp->displayViewPrescriptionDetailPage();
+              }
             ?>
             <BR>
             </div>  

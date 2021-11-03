@@ -1,71 +1,67 @@
 <?php 
 
-class viewPrescriptionControl
+class searchPrescriptionControl
 {
-    public function getPrescriptions($doc_id)
+    public function onSubmit($doc_id, $patient_id)
+    {
+        $conn = mysqli_connect("localhost","root","","csit314"); 
+        $check =  mysqli_query($conn, "SELECT * FROM prescription where doctorid='$doc_id' and patientid='$patient_id'");
+        $data = mysqli_fetch_array($check);  
+        $result = mysqli_num_rows($check);  
+        if ($result == 0) 
+        {
+            return false;
+        }
+        return true;  
+
+    }
+
+    public function getPrescriptions($doc_id, $patient_id)
     {
         $conn = mysqli_connect("localhost","root","","csit314");
         $doc_id= $_SESSION['id'];
         return $doc_id;
     }
-	public function displayViewPrescriptionPage() 
-    {  
-        $conn = mysqli_connect("localhost","root","","csit314");
-        $query = "select * from prescription where status='Uncollected'";
-        $res = mysqli_query($conn, $query);
 
-                    if(mysqli_num_rows($res)>0)
-                    {
-                        echo "<br><table width='100%' border='1' style='text-align:center;'>\n";
-                        echo "<tr ><th style='text-align:center;' >Prescription ID</th><th style='text-align:center;'>Doctor ID</th><th style='text-align:center;'>Patient ID</th><th style='text-align:center;'>Token ID</th><th style='text-align:center;'>Drug ID</th><th style='text-align:center;'>Quantity</th><th style='text-align:center;'>Date</th><th style='text-align:center;'>Status</th><th style='text-align:center;'>View</th></tr>\n";
+    public function displayViewPrescriptionPage()
+    {
+        $conn = mysqli_connect("localhost","root","","csit314");
+        $prescriptionid = $_REQUEST['pid'];
+        $patientid = $_REQUEST['patient'];
+        $sql = "SELECT * FROM prescription where (prescriptionid='$prescriptionid') or (patientid='$patientid')";
+        $res = mysqli_query($conn, $sql);
+              if(mysqli_num_rows($res)>0)
+              {
+                        echo "<br><table width='100%' border='1'>\n";
+                        echo "<tr><th>Prescription</th><th>Doctor</th><th>Patient</th><th>Drug</th><th>Quantity</th><th>View</th></tr>\n";
                         while($Row = $res->fetch_array())
                         {
 
                             echo "<tr><td>{$Row['prescriptionid']}</td><td>{$Row['doctorid']}</td>";
-                            echo "<td>{$Row['patientid']}</td><td>{$Row['tokenid']}</td>";
-                            echo "<td>{$Row['drugid']}</td><td>{$Row['qty']}</td>";
-                            echo "<td>{$Row['prescriptiondate']}</td><td>{$Row['status']}</td>";
-
+                            echo "<td>{$Row['patientid']}</td><td>{$Row['drugid']}</td>";
+                            echo "<td>{$Row['qty']}</td>";
                             ?>
-                            <td><form method="post" action="viewPrescriptionPage.php">
-                            	<input type="hidden" name="id" value="<?php echo $Row['prescriptionid']; ?>">
+                              <td><form method="post" action="searchPatientPrescriptionPage.php">
+                                <input type="hidden" name="id" value="<?php echo $Row['prescriptionid']; ?>">
                                 <input type="hidden" name="drugid" value="<?php echo $Row['drugid']; ?>">
-                            	<input style="background-color: #016064;font-size: 10px;width:100% "type="submit" name="view" value="Details"></td>
+                                <input style="background-color: #016064;font-size: 10px;width:100% "type="submit" name="view" value="Details"></td>
+                            </form>
                             </tr>
-                        </form>
                                     <?php
                         }
                     echo "</table>\n";
-                    }
-                $conn = mysqli_connect("localhost","root","","csit314");
-                $sql= "select * from prescription where status='Collected'";
-                $r = mysqli_query($conn, $sql);
-                        if(mysqli_num_rows($r)>0)
-                        {
-                            echo "<br><table width='100%' border='1' style='text-align:center;'>\n";
-                            echo "<tr><th style='text-align:center;'>Prescription ID</th><th style='text-align:center;'>Doctor ID</th><th style='text-align:center;'>Patient ID</th><th style='text-align:center;'>Token ID</th><th style='text-align:center;'>Drug ID</th><th style='text-align:center;'>Quantity</th><th style='text-align:center;'>Date</th><th style='text-align:center;'>Status</th></tr>\n";
-                            while($collect = $r->fetch_array())
-                            {
+                    
+              }
+              else
+              {
+                 echo "0 records";
 
-                                echo "<tr><td>{$collect['prescriptionid']}</td><td>{$collect['doctorid']}</td>";
-                                echo "<td>{$collect['patientid']}</td><td>{$collect['tokenid']}</td>";
-                                echo "<td>{$collect['drugid']}</td><td>{$collect['qty']}</td>";
-                                echo "<td>{$collect['prescriptiondate']}</td><td>{$collect['status']}</td>";
-
-                                ?>
-                                </tr>
-        
-                                        <?php
-                            }
-                    echo "</table>\n";
-                    }
-        
-    	}
+              }       
+    }
 
         public function getPrescription($prescription_id)
         {
             $conn = mysqli_connect("localhost","root","","csit314");
-            $prescription_id = $_POST['id'];
             return $prescription_id;
         }
 
@@ -127,7 +123,7 @@ class viewPrescriptionControl
                 </tr> 
                   
                 <tr>
-                    <td><a href="viewPrescriptionPage.php"  style="background-color: #016064;font-size: 10px;width:100%">BACK</a></td>
+                    <td><a href="searchPatientPrescriptionPage.php"  style="background-color: #016064;font-size: 10px;width:100%">BACK</a></td>
                     <td>
                         <input type="hidden" name="id" value="<?php echo $Row['prescriptionid']; ?>">
                         <input type="hidden" name="drugid" value="<?php echo $Row['drugid']; ?>">
@@ -142,7 +138,6 @@ class viewPrescriptionControl
             }
         }
         }
-
     
 
 
