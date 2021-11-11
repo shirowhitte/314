@@ -33,11 +33,11 @@ jobs:
           php-version: '8.0'
           extensions: imagick, swoole
 
-      - name: download composer
-        run: curl -sS https://getcomposer.org/installer | php
-      - name: install composer
-        run: php composer.phar install
-      - name: edit permission for test file
-        run: chmod +x vendor/bin/phpunit
+      # - name: download composer
+      #   run: curl -sS https://getcomposer.org/installer | php
+      # - name: install composer
+      #   run: php composer.phar install
+      # - name: edit permission for test file
+      #   run: chmod +x vendor/bin/phpunit
       - name: run test
         run: php ./vendor/bin/phpunit
