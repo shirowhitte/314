@@ -1,6 +1,6 @@
 <?php
 
-require "../admin/adminLoginCTRL.php";
+require __DIR__ . "/../admin/adminLoginCTRL.php";
 
 
 class LoginLogoutTest extends \PHPUnit\Framework\TestCase {
