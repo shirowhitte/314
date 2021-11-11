@@ -55,6 +55,21 @@ $pharmacist= new pharmacistLoginCTRL();
         }  
     }   
 	$pharmacist->displayPharmacistLogin();
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $validate = $pharmacist->validateFields($_REQUEST['id'], $_REQUEST['password']);
+        if ($validate) {
+            $login = $pharmacist->onSubmit($_REQUEST['id'], $_REQUEST['password']);
+            if ($login) {
+                $pharmacist->displayPharmacistPage();
+            } else {
+                $pharmacist->displayErrMsg();
+            }
+        } else {
+            $pharmacist->displayErrMsg();
+        }
+    }
+    $pharmacist->displayPharmacistLogin();
 ?>
 
 	<div class="end">             

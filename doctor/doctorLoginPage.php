@@ -40,21 +40,20 @@ $doctor = new doctorLoginCTRL();
 </div>
 <?php
 
-	if ($_SERVER["REQUEST_METHOD"] == "POST")
-    {  
-        $login = $doctor->onSubmit($_REQUEST['id'],$_REQUEST['password']);  
-        if($login)
-        { 
-            $doctor->validateFields($_REQUEST['id'],$_REQUEST['password']);
-            $doctor->displayDoctorPage();
-
-        }
-        else
-        {  
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $validate = $doctor->validateFields($_REQUEST['id'], $_REQUEST['password']);
+        if ($validate) {
+            $login = $doctor->onSubmit($_REQUEST['id'], $_REQUEST['password']);
+            if ($login) {
+                $doctor->displayDoctorPage();
+            } else {
+                $doctor->displayErrMsg();
+            }
+        } else {
             $doctor->displayErrMsg();
-        }  
-    }   
-	$doctor->displayDoctorLogin();
+        }
+    }
+    $doctor->displayDoctorLogin();
 ?>
 
 	<div class="end">             
