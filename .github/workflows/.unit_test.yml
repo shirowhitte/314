@@ -37,7 +37,7 @@ jobs:
         # You may pin to the exact commit or the version.
         # uses: mirromutth/mysql-action@de1fba8b3f90ce8db80f663a7043be3cf3231248
       - uses: mirromutth/mysql-action@v1.1
-          with:
+         - with:
             host port: 3306 # Optional, default value is 3306. The port of host
             container port: 3307 # Optional, default value is 3306. The port of container
             character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
