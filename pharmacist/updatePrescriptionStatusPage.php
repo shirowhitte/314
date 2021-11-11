@@ -1,12 +1,15 @@
 <?php
 include_once 'pharmacistLoginCTRL.php';//connection
 include_once 'pharmacistLogoutCTRL.php';//connection
+include_once 'enterTokenControl.php';//connection
+include_once 'updatePrescriptionStatusControl.php';//connection
 include_once '../assets/conn/dbconnect.php';//connectio
 
 session_start();
 
 $pharmacist = new pharmacistLoginCTRL();  
-
+$update = new updatePrescriptionStatusCTRL();
+$enter = new EnterTokenControl();
 $pharmacistId = $_SESSION['id'];//get id
 $pharmacistPw = $_SESSION['password'];//get id
 
@@ -63,11 +66,6 @@ if(isset($_POST['logout']))
     			color: white;
     			font-family: Arial, Helvetica, sans-serif;
     		}
-
-        table,tr,th,td
-        {
-          height: 50px;
-        }
    		</style>
     </head>
 
@@ -105,51 +103,31 @@ if(isset($_POST['logout']))
     </nav>
 
     <div class="home-content">
-      <div class="overview-boxes">
+      <div class="overview-boxes" style="width: 100%;">
         
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Today Date</div>
-            <div class="number"><p>
-            <script> document.write(new Date().toLocaleDateString()); </script>
-            </p></div>
-          </div>
+        <div class="box"  style="width: 100%;text-align: center;">
+          <div class="right-side" style="width: 100%;">
+            <H2>Enter Token </H2>
+            <br>
+            <?php
+            $update->displayTokenPrescriptionPage();
+            $tokenid= $_REQUEST['tokenid'];
+
+
+            if(isset($_POST['Update']))
+            {
+              if($update->onSubmit($tokenid)=="TRUE")
+              {
+                $update->updatePrescriptionStatus($tokenid);
+                $update->displaySearchTokenPage();
+              }
+            }
+            ?>
+
+            </div>
         </div>
       </div>
 
-      <div class="sales-boxes" style="width:100%">
-        <div class="recent-sales box">
-          <h3>Uncollected Prescription</h3>
-          <?php
-
-          $conn = mysqli_connect("localhost","root","","csit314");
-          $query = "select * from prescription where status='Uncollected' order by prescriptiondate";
-          $result = mysqli_query($conn, $query);
-           if(mysqli_num_rows($result)>0)
-              {
-                        echo "<br><table width='100%' border='1' style='text-align:center;'>\n";
-                        echo "<tr ><th style='text-align:center;'>Token ID</th><th style='text-align:center;'>Prescription</th><th style='text-align:center;'>Doctor</th><th style='text-align:center;'>Patient</th><th style='text-align:center;'>Drug</th><th style='text-align:center;'>Quantity</th><th style='text-align:center;'>View</th><th style='text-align:center;'>Update</th></tr>\n";
-                        while($Row = $result->fetch_array())
-                        {
-
-                            echo "<tr><td>{$Row['tokenid']}</td><td>{$Row['prescriptionid']}</td><td>{$Row['doctorid']}</td>";
-                            echo "<td>{$Row['patientid']}</td><td>{$Row['drugid']}</td>";
-                            echo "<td>{$Row['qty']}</td><td>{$Row['status']}</td>";
-                            ?>
-                              <td><a href="enterTokenPage.php">Search</a></td>
-                            </form>
-                            </tr>
-                                    <?php
-                        }
-                    echo "</table>\n";
-                    
-              }
-
-
-
-          ?>
-          
-     
     </div>
   </section>
 

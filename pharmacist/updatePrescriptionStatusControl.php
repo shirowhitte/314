@@ -1,17 +1,28 @@
 <?php
-class updatePrescriptionCTRL
+class updatePrescriptionStatusCTRL
 {
-    public function getPrescription($id)
-    {
-        return $id;    
-    } 
 
-    public function displayViewPrescriptionDetailPage()
+    public function onSubmit($tokenid)
+    {
+        $conn = mysqli_connect("localhost","root","","csit314"); 
+        $tokenid= $_POST['tokenid'];
+        $check =  mysqli_query($conn, "SELECT * FROM prescription where tokenid='$tokenid'");
+        $data = mysqli_fetch_array($check);  
+        $result = mysqli_num_rows($check);  
+        if ($result == 0) 
+        {
+            return false;
+        }
+        return true;  
+
+    }
+
+
+    public function displayTokenPrescriptionPage()
     {
             $conn = mysqli_connect("localhost","root","","csit314");
-            $prescribeid= $_POST['id'];
-            $drugid= $_POST['drugid'];
-            $query = "select * from prescription where prescriptionid='$prescribeid' and drugid='$drugid'";
+            $tokenid= $_POST['tokenid'];
+            $query = "select * from prescription where tokenid='$tokenid' limit 1";
             $result = mysqli_query($conn, $query);
 
             if(mysqli_num_rows($result)>0)
@@ -21,7 +32,7 @@ class updatePrescriptionCTRL
 
             ?>
             <br>
-            <form method="post" action="updatePrescriptionPage.php">
+            <form method="post" action="updatePrescriptionStatusPage.php">
             <table style="text-align:center;margin-left:auto;margin-right: auto;">
             <tbody>  
             <tr>       
@@ -41,33 +52,50 @@ class updatePrescriptionCTRL
                     <td>Patient ID</td>
                     <td><input  style="width:400px;padding-left: 100px;"type ="text" value="<?php echo $Row['patientid'];  ?>" name="patientid" required="" readonly  ></td>
                 </tr>
-               
                  <tr>
                     <td>Token ID</td>
                     <td><input  style="width:400px;padding-left: 100px;"type ="text" value="<?php echo $Row['tokenid']; ?>" name="tokenid"required="" readonly  ></td>
                 </tr>
+
+                <?php
+ 
+                $sql = "select * from prescription where tokenid='$tokenid' ";
+                $count =1;
+                 foreach($conn->query($sql) as $rw)
+                 {
+                    ?>
+               
+                
                  <tr>
-                    <td>Drug ID</td>
-                    <td><input  style="width:400px;padding-left: 100px;"type ="text" value="<?php echo $Row['drugid']; ?>" name="drugid" required=""readonly  >
+                    <td>Drug ID <?php echo $count ?></td>
+                    <td><input  style="width:400px;padding-left: 100px;"type ="text" value="<?php echo $rw['drugid']; ?>" name="drugid" required=""readonly  >
                 
                 </tr>
-                
-                <tr>
-                    <td>Quantity</td>
-                    <td><input style="width:400px;padding-left: 100px;"type ="text" value="<?php echo  $Row['qty'];?>" name="qty"  required="">
+                 <tr>
+                    <td>Quantity <?php echo $count ?></td>
+                    <td><input style="width:400px;padding-left: 100px;"type ="text" value="<?php echo  $rw['qty'];?>" name="qty"  readonly required="">
                     </td>
                 </tr>  
+                    <?php
+                    $count++;
+                    }
+                    ?>
+                
+               
                 <tr>
                     <td>Status</td>
-                    <td><input style="width:400px;padding-left: 100px;"type ="text" value="<?php echo  $Row['status'];?>" name="status" readonly>
+                    <td><select style="width:300px;padding-left: 100px;" name="status" readonly>
+                        <option value="Collected">Collected</option>
+                        <option value="Uncollected">Uncollected</option>
+                    </select>
                     </td>
                 </tr> 
                   
                 <tr>
-                    <td><a href="viewPrescriptionPage.php"  style="background-color: #016064;font-size: 10px;width:100%">BACK</a></td>
+                    <td><br><a href="enterTokenPage.php" style="background-color: #016064;font-size: 10px;width:100%">BACK TO TOKEN</a></td>
                     <td>
                          
-                        <input style="background-color: #016064;font-size: 10px;width:100%; color: white; " type="submit" name="Update" value="Update">
+                        <br><input style="background-color: #016064;font-size: 10px;width:100%; color: white; " type="submit" name="Update" value="Update">
 
                     </td>
                 </tr>                                   
@@ -80,49 +108,16 @@ class updatePrescriptionCTRL
         }
     }
 
-    
-    public function onSubmit($quantity) 
-    {  
-        $conn = mysqli_connect("localhost","root","","csit314"); 
-        $check = mysqli_query($conn, "SELECT qty from prescription where qty=0");  
-        $data = mysqli_fetch_array($check);  
-        $result = mysqli_num_rows($check);  
-        if ($result == 0) {  
- 
-            return true;  
-        } 
-        else 
-        {  
-            return false;  
-        }  
-    }
-
-    public function validateFields($quantity)
+    public function updatePrescriptionStatus($tokenid)
     {
-        $conn = mysqli_connect("localhost","root","","csit314");
-            if(empty($quantity))
-            {
-                return false;
-            }
-            return true;
-        
-    }
-
-    public function displayErrMsg()
-    {
-        echo "Please fill in this field";
-        return false;
-    }
-        public function updatePrescription($doctorid, $patientid, $drugid, $quantity, $date)
-        {
             $conn = mysqli_connect("localhost","root","","csit314");
-            $prescriptionid = $_POST['prescriptionid'];   
-            $drugid = $_POST['drugid'];          
-                    $result=mysqli_query($conn,"UPDATE `prescription` SET `qty`='$quantity' WHERE prescriptionid='$prescriptionid' and drugid='$drugid'");
+            $tokenid= $_POST['tokenid'];
+            $status= $_POST['status'];
+            $result=mysqli_query($conn,"UPDATE prescription SET status='$status' where tokenid='$tokenid'");
 
                     if($result)
                     {
-                        $abc = "Prescription" . " ". "has been modified.";
+                        $abc = "Status" . " ". "update successfully.";
                         ?>
                         <script type="text/javascript">
 
@@ -133,18 +128,33 @@ class updatePrescriptionCTRL
                          echo 'alert(test)';
                          echo '</script>';
                         ?>
-                        <script>
-                            
-                            window.location.href = "viewPrescriptionPage.php";
-                        </script>
+                        
                         <?php
                     }
                     else
                     {
-                         echo "Error adding record"; 
+                         echo "Error editing record"; 
                     }
                 
-            }
-   
-} 
+    }
 
+    public function displaySearchTokenPage()
+    {
+        ?>
+        <script>               
+            window.location.href = "enterTokenPage.php";
+        </script>
+         <?php
+
+    }
+
+
+
+    
+    
+
+
+
+
+
+}
