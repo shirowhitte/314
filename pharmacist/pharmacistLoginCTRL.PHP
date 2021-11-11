@@ -73,14 +73,13 @@ class pharmacistLoginCTRL
         $result = mysqli_query($conn,$sql);
         $user_data = mysqli_fetch_array($result)  or die( mysqli_error($conn));
         $res = mysqli_num_rows($result) or die( mysqli_error($conn));
-        if($res==1)
+        if($res!==1)
         {
-            echo $user_data['role'] ." " .$user_data['name'] ;
-            $_SESSION['password'] = $user_data['password'];
-            return true;
-
+            
+            return false;
         }
-        return false;
+        echo $user_data['role'] ." " .$user_data['name'] ;
+        $_SESSION['password'] = $user_data['password'];
     }
   
     public function displayErrMsg()
