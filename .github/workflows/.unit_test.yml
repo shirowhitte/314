@@ -26,6 +26,13 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: imagick, swoole
+
       - name: download composer
         run: curl -sS https://getcomposer.org/installer | php
       - name: install composer
