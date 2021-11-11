@@ -1,9 +1,9 @@
 <?php
 
-require "home/runner/work/314/314/admin/adminLoginCTRL.php";
-require "home/runner/work/314/314/doctor/doctorLoginCTRL.php";
-require "home/runner/work/314/314/patient/patientLoginCTRL.php";
-require "home/runner/work/314/314/pharmacist/pharmacistLoginCTRL.php";
+require "/314/admin/adminLoginCTRL.php";
+require "/314/doctor/doctorLoginCTRL.php";
+require "/314/patient/patientLoginCTRL.php";
+require "/314/pharmacist/pharmacistLoginCTRL.php";
 
 
 class LoginValidationTest extends \PHPUnit\Framework\TestCase {
