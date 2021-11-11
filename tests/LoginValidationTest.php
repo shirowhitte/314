@@ -1,9 +1,9 @@
 <?php
 
-require __DIR__ . "/../admin/adminLoginCTRL.php";
-require __DIR__ . "/../doctor/doctorLoginCTRL.php";
-require __DIR__ . "/../patient/patientLoginCTRL.php";
-require __DIR__ . "/../pharmacist/pharmacistLoginCTRL.php";
+require "/../admin/adminLoginCTRL.php";
+require "/../doctor/doctorLoginCTRL.php";
+require "/../patient/patientLoginCTRL.php";
+require "/../pharmacist/pharmacistLoginCTRL.php";
 
 
 class LoginValidationTest extends \PHPUnit\Framework\TestCase {
