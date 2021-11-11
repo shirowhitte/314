@@ -23,7 +23,7 @@ class adminLoginCTRL
         </div>
         <?php
     }
-    public function onSubmit($id, $password) 
+    public static function onSubmit($id, $password) 
     {  
         $role = "Admin";
         $conn = mysqli_connect("localhost","root","","csit314"); 

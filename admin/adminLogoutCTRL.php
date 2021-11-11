@@ -2,10 +2,13 @@
 
 class adminLogoutCTRL
 {
-	public function logout() 
+	public static function logout() 
     {  
         $_SESSION['adminSession'] = false;  
-        session_destroy();  
+        $result = session_destroy();  
+        if($result){
+            return true;
+        }
     }  
 
     public function displayAdminLogin()
