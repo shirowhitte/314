@@ -1,0 +1,13 @@
+image: php:8.0.11-cli
+
+# before_script:
+#   - apt-get update -yqq
+#   - apt-get install -yqq curl
+#   - curl -sS https://getcomposer.org/installer | php
+#   - php composer.phar install
+
+
+test:
+  script:
+  # - chmod +x vendor/bin/phpunit
+  - php ./vendor/bin/phpunit
