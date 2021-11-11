@@ -24,35 +24,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-
-      - name: Setup PHP with PECL extension
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.0'
-          extensions: imagick, swoole
-
-      - name: Setup MySQL
-        # You may pin to the exact commit or the version.
-        # uses: mirromutth/mysql-action@de1fba8b3f90ce8db80f663a7043be3cf3231248
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306 # Optional, default value is 3306. The port of host
-          container port: 3307 # Optional, default value is 3306. The port of container
-          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-          collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-          mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-          mysql database: 'csit314' # Optional, default value is "test". The specified database which will be create
-          mysql root password: ''
-          mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-          mysql password: ' ' # Required if "mysql user" exists. The password for the "mysql user"
-
-      # - name: download composer
-      #   run: curl -sS https://getcomposer.org/installer | php
-      # - name: install composer
-      #   run: php composer.phar install
-      # - name: edit permission for test file
-      #   run: chmod +x vendor/bin/phpunit
+      - name: download composer
+        run: curl -sS https://getcomposer.org/installer | php
+      - name: install composer
+        run: php composer.phar install
+      - name: edit permission for vendor/bin/phpunit
+        run: chmod +x vendor/bin/phpunit
       - name: run test
         run: php ./vendor/bin/phpunit
