@@ -1,18 +1,18 @@
 <?php
 
-class doctorLoginCTRL
+class pharmacistLoginCTRL
 {
-    public function displayDoctorLogin()
+    public function displayPharmacistLogin()
     {
         ?>
         <div class="container">
             <div class="login-container">
                 <div class="avatar"></div>
                 <div class="form-box">
-                <form action="doctorLoginPage.php" method="POST">
-                    <input type="text" name="role" placeholder="Doctor" readonly>
+                <form action="pharmacistLoginPage.php" method="POST">
+                    <input type="text" name="role" placeholder="Pharmacist" readonly>
                     <br><br>
-                    <input type="text" name="id" placeholder="Enter Doctor ID" required>
+                    <input type="text" name="id" placeholder="Enter Pharmacist ID" required>
                     <br>
                     <input type="password" name="password" placeholder="Password" required>
                     <br><br>
@@ -25,13 +25,13 @@ class doctorLoginCTRL
     }
     public function onSubmit($id, $password) 
     {  
-        $role = "Doctor";
+        $role = "Pharmacist";
         $conn = mysqli_connect("localhost","root","","csit314"); 
         $check = mysqli_query($conn, "SELECT * from user where id='$id' and password='$password' and role='$role'");  
         $data = mysqli_fetch_array($check);  
         $result = mysqli_num_rows($check);  
         if ($result == 1) {  
-            $_SESSION['doctorSession'] = true;  
+            $_SESSION['pharmacistSession'] = true;  
             $_SESSION['id'] = $data['id']; 
             $_SESSION['password'] = $data['password'];    
             return true;  
@@ -68,14 +68,13 @@ class doctorLoginCTRL
         $result = mysqli_query($conn,$sql);
         $user_data = mysqli_fetch_array($result)  or die( mysqli_error($conn));
         $res = mysqli_num_rows($result) or die( mysqli_error($conn));
-        if($res==1)
+        if($res!==1)
         {
-            echo $user_data['role'] ." " .$user_data['name'] ;
-            $_SESSION['password'] = $user_data['password'];
-            return true;
-
+            
+            return false;
         }
-        return false;
+        echo $user_data['role'] ." " .$user_data['name'] ;
+        $_SESSION['password'] = $user_data['password'];
     }
   
     public function displayErrMsg()
@@ -83,17 +82,17 @@ class doctorLoginCTRL
         echo "<br><p style='background-color:white;color:blue;text-align:center;'>Invalid ID or Password</p>";  
     }
 
-    public function displayDoctorPage()
+    public function displayPharmacistPage()
     {
         $conn = mysqli_connect("localhost","root","","csit314"); 
-        header("location:doctorPage.php"); 
+        header("location:pharmacistPage.php"); 
     }
 
     public function session() 
     {  
-        if (isset($_SESSION['doctorSession'])) 
+        if (isset($_SESSION['pharmacistSession'])) 
         {  
-            return $_SESSION['doctorSession'];  
+            return $_SESSION['pharmacistSession'];  
         }  
     }    
 }

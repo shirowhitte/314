@@ -1,18 +1,18 @@
 <?php
 
-class adminLoginCTRL
+class doctorLoginCTRL
 {
-    public function displayAdminLogin()
+    public function displayDoctorLogin()
     {
         ?>
         <div class="container">
             <div class="login-container">
                 <div class="avatar"></div>
                 <div class="form-box">
-                <form action="adminLoginPage.php" method="POST">
-                    <input type="text" name="role" placeholder="Admin" readonly>
+                <form action="doctorLoginPage.php" method="POST">
+                    <input type="text" name="role" placeholder="Doctor" readonly>
                     <br><br>
-                    <input type="text" name="id" placeholder="Enter Admin ID" required>
+                    <input type="text" name="id" placeholder="Enter Doctor ID" required>
                     <br>
                     <input type="password" name="password" placeholder="Password" required>
                     <br><br>
@@ -25,13 +25,13 @@ class adminLoginCTRL
     }
     public function onSubmit($id, $password) 
     {  
-        $role = "Admin";
+        $role = "Doctor";
         $conn = mysqli_connect("localhost","root","","csit314"); 
         $check = mysqli_query($conn, "SELECT * from user where id='$id' and password='$password' and role='$role'");  
         $data = mysqli_fetch_array($check);  
         $result = mysqli_num_rows($check);  
         if ($result == 1) {  
-            $_SESSION['adminSession'] = true;  
+            $_SESSION['doctorSession'] = true;  
             $_SESSION['id'] = $data['id']; 
             $_SESSION['password'] = $data['password'];    
             return true;  
@@ -41,7 +41,6 @@ class adminLoginCTRL
             return false;  
         }  
     }
-
 
     public static function validateFields($id, $password)
     {
@@ -84,17 +83,17 @@ class adminLoginCTRL
         echo "<br><p style='background-color:white;color:blue;text-align:center;'>Invalid ID or Password</p>";  
     }
 
-    public function displayAdminPage()
+    public function displayDoctorPage()
     {
         $conn = mysqli_connect("localhost","root","","csit314"); 
-        header("location:admin/adminPage.php"); 
+        header("location:doctorPage.php"); 
     }
 
     public function session() 
     {  
-        if (isset($_SESSION['adminSession'])) 
+        if (isset($_SESSION['doctorSession'])) 
         {  
-            return $_SESSION['adminSession'];  
+            return $_SESSION['doctorSession'];  
         }  
     }    
 }
