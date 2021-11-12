@@ -23,7 +23,7 @@ class adminLoginCTRL
         </div>
         <?php
     }
-    public static function onSubmit($id, $password) 
+    public function onSubmit($id, $password) 
     {  
         $role = "Admin";
         $conn = mysqli_connect("localhost","root","","csit314"); 
@@ -42,28 +42,24 @@ class adminLoginCTRL
         }  
     }
 
-    public function validateFields($id, $password)
+
+    public static function validateFields($id, $password)
     {
-        $conn = mysqli_connect("localhost","root","","csit314");
-        $err = "";
-        $id = $_POST['id'];
-        $password = $_POST['password'];
-        if ($_SERVER["REQUEST_METHOD"] == "POST")
-        {
-            if(empty($_POST['id'])||empty($_POST['password']))
-            {
-                $err = "Please fill in this field";
-                return false;
-            }
-            else
-            {
-                $id = $_POST['id'];
-                $password = $_POST['password'];
-                $err="";
-                return true;
-            }
-       
+        $validateCount = 0;
+        if (preg_match("/^\+?[0-9]{4}$/", $id) && preg_match("/^[A-Za-z\d]{4,}$/", $password)) { // id = 4 digits, password = 4 char minimum
+            $validateCount++;
         }
+
+        if (!empty($id) || !empty($password)) {
+            $validateCount++;
+        }
+
+        if ($validateCount == 2) { // if inputs are valid and not null
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public function verifyUser($id,$password)
