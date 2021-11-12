@@ -50,7 +50,7 @@ class LoginValidationTest extends \PHPUnit\Framework\TestCase {
         );
     }
 
-    public function testParLoginWithRightDetails(): void{
+    public function testPharLoginWithRightDetails(): void{
         $this->assertEquals(
             true,
             pharmacistLoginCTRL::validateFields(1000, "AbbX101")
